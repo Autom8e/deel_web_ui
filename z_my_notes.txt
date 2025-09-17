@@ -1,0 +1,251 @@
+install playwright
+npm init playwright@latest
+
+after running above we get
+ npx playwright test
+    Runs the end-to-end tests.
+
+  npx playwright test --ui
+    Starts the interactive UI mode.
+
+  npx playwright test --project=chromium
+    Runs the tests only on Desktop Chrome.
+
+  npx playwright test example
+    Runs the tests in a specific file.
+
+  npx playwright test --debug
+    Runs the tests in debug mode.
+
+  npx playwright codegen
+    Auto generate tests with Codegen.
+
+We suggest that you begin by typing:
+
+    npx playwright test
+
+And check out the following files:
+  - ./tests/example.spec.ts - Example end-to-end test
+  - ./tests-examples/demo-todo-app.spec.ts - Demo Todo App end-to-end tests
+  - ./playwright.config.ts - Playwright Test configuration
+
+USEFUL COMMANDS
+npx playwright test
+
+See the browser window: add --headed.
+Run a single project/browser: --project=chromium.
+Run one file: npx playwright test tests/example.spec.ts.
+Open testing UI mode with console logs and times: --ui.
+
+show html report
+npx playwright show-report
+
+Writing tests
+Playwright automatically waits for actionability checks to pass before performing each action. You don't need to
+add manual waits or deal with race conditions.
+Playwright assertions are designed to describe expectations that will eventually be met, eliminating flaky timeouts
+and racy checks.
+
+Navigation
+Playwright waits for the page to reach the load state before continuing
+await page.goto('https://playwright.dev/');
+
+Locator Basic Actions
+Action	            Description
+locator.check()	    Check the input checkbox
+locator.click()	    Click the element
+locator.uncheck()	Uncheck the input checkbox
+locator.hover()	    Hover mouse over the element
+locator.fill()	    Fill the form field, input text
+locator.focus()	    Focus the element
+locator.press()	    Press single key
+locator.setInputFiles()	Pick files to upload
+locator.selectOption()	Select option in the drop down
+
+Assertions
+Playwright includes test assertions in the form of expect function.
+To make an assertion, call expect(value) and choose a matcher that reflects the expectation.
+
+Assertion	                    Description
+element assertions
+expect(locator).toBeChecked()	Checkbox is checked
+expect(locator).toBeEnabled()	Control is enabled
+expect(locator).toBeVisible()	Element is visible
+expect(locator).toContainText()	Element contains text
+expect(locator).toHaveAttribute()	Element has attribute
+expect(locator).toHaveCount()	List of elements has given length
+expect(locator).toHaveText()	Element matches text
+expect(locator).toHaveValue()	Input element has value
+page assertions
+expect(page).toHaveTitle()	    Page has title
+expect(page).toHaveURL()	    Page has URL
+
+generic synchronous checks that does not use await
+toEqual
+toContain
+toBeTruthy
+expect(success).toBeTruthy();
+
+Test Isolation - fixture ile yapılıyor kontrol et sonra bak
+Playwright Test is based on the concept of test fixtures such as the built in page fixture, which is passed into your test.
+Pages are isolated between tests due to the Browser Context, which is equivalent to a brand new browser profile.
+Every test gets a fresh environment, even when multiple tests run in a single browser.
+
+Using Test Hooks - to declare grouping tests
+You can use various test hooks such as test.describe to declare a group of tests and test.beforeEach
+and test.afterEach which are executed before/after each test. Other hooks include the test.beforeAll and
+test.afterAll which are executed once per worker before/after all tests.
+
+Running Codegen
+npx playwright codegen // opens playwright inspector
+
+Running tests
+You can run your tests with the playwright test command.
+This runs your tests on all browsers as configured in the playwright.config file
+
+run test in UI mode
+npx playwright test --ui
+
+different browser run
+npx playwright test --project webkit
+
+run specific test
+npx playwright test landing-page.spec.ts
+
+To run a test with a specific title, use the -g flag followed by the title of the test.
+npx playwright test -g "add a todo item"
+
+Run last failed tests: To run only the tests that failed in the last test run
+npx playwright test --last-failed
+
+Debugging
+UI mode
+you can use pick locator button also edit the locator on locator tab and see highlighted on the page
+
+playwright inspector at codegen
+
+run debug mode
+npx playwright test example.spec.ts --debug
+
+Recording a Trace
+npx playwright test --trace on
+trace html report içinden bakılabiliyor
+
+Test Configuration
+Option	                    Description
+testConfig.forbidOnly	    Whether to exit with an error if any tests are marked as test.only. Useful on CI.
+testConfig.fullyParallel	have all tests in all files to run in parallel. See Parallelism and Sharding for more details.
+testConfig.projects	        Run tests in multiple configurations or on multiple browsers
+testConfig.reporter	        Reporter to use. See Test Reporters to learn more about which reporters are available.
+testConfig.retries	        The maximum number of retry attempts per test. See Test Retries to learn more about retries.
+testConfig.testDir	        Directory with the test files.
+testConfig.use	            Options with use{}
+testConfig.webServer	    To launch a server during the tests, use the webServer option
+testConfig.workers	        The maximum number of concurrent worker processes to use for parallelizing tests.
+                            Can also be set as percentage of logical CPU cores, e.g. '50%'.. See Parallelism and Sharding
+
+Expect Options
+Configuration for the expect assertion library.
+
+export default defineConfig({
+  expect: {
+    // Maximum time expect() should wait for the condition to be met.
+    timeout: 5000,
+
+    toHaveScreenshot: {
+      // An acceptable amount of pixels that could be different, unset by default.
+      maxDiffPixels: 10,
+    },
+      },
+
+    });
+
+Test Annotations
+test.skip() marks the test as irrelevant. Playwright does not run such a test. Use this annotation when the test is not applicable in some configuration.
+test.fail() marks the test as failing. Playwright will run this test and ensure it does indeed fail. If the test does not fail, Playwright will complain.
+test.fixme() marks the test as failing. Playwright will not run this test, as opposed to the fail annotation. Use fixme when running the test is slow or crashes.
+test.slow() marks the test as slow and triples the test timeout.
+test.only() When there are focused tests, only these tests run.
+
+Tag tests
+To tag a test, either provide an additional details object when declaring a test, or add @-token to the test title.
+Note that tags must start with @ symbol.
+
+Running tagged tests
+npx playwright test --grep @fast
+
+Disable parallelization
+npx playwright test --workers=1
+
+Show report on different port
+npx playwright show-report --port 8080
+
+FIXTURES
+Playwright Test is based on the concept of test fixtures.
+Test fixtures are used to establish the environment for each test, giving the test everything it needs and nothing else.
+Test fixtures are isolated between tests. With fixtures, you can group tests based on their meaning, instead of their common setup
+
+Fixture	    Type	            Description
+page	    Page	            Isolated page for this test run.
+context	    BrowserContext	    Isolated context for this test run. The page fixture belongs to this context as well. Learn how to configure context.
+browser	    Browser	            Browsers are shared across tests to optimize resources. Learn how to configure browsers.
+browserName	string	            The name of the browser currently running the test. Either chromium, firefox or webkit.
+request	    APIRequestContext	Isolated APIRequestContext instance for this test run.
+
+Fixtures have a number of advantages over before/after hooks:
+
+-Fixtures encapsulate setup and teardown in the same place so it is easier to write. So if you have an after hook that
+tears down what was created in a before hook, consider turning them into a fixture.
+-Fixtures are reusable between test files - you can define them once and use them in all your tests.
+That's how Playwright's built-in page fixture works. So if you have a helper function that is used in multiple tests,
+consider turning it into a fixture.
+-Fixtures are on-demand - you can define as many fixtures as you'd like, and Playwright Test will setup only the ones
+needed by your test and nothing else.
+-Fixtures are composable - they can depend on each other to provide complex behaviors.
+-Fixtures are flexible. Tests can use any combination of fixtures to precisely tailor the environment
+to their needs, without affecting other tests.
+-Fixtures simplify grouping. You no longer need to wrap tests in describes that set up their environment, and are free
+to group your tests by their meaning instead.
+
+ASSERTIONS
+Playwright includes test assertions in the form of expect function. To make an assertion, call expect(value) and
+choose a matcher that reflects the expectation. There are many generic matchers like toEqual, toContain, toBeTruthy
+that can be used to assert any conditions.
+
+await expect(locator).toBeEditable()	Element is editable
+await expect(locator).toBeEmpty()	Container is empty
+await expect(locator).toBeEnabled()	Element is enabled
+await expect(locator).toBeFocused()	Element is focused
+await expect(locator).toBeHidden()	Element is not visible
+await expect(locator).toBeInViewport()	Element intersects viewport
+await expect(locator).toBeVisible()	Element is visible
+await expect(locator).toContainText()	Element contains text
+
+Negating matchers
+In general, we can expect the opposite to be true by adding a .not to the front of the matchers:
+
+expect(value).not.toEqual(0);
+await expect(locator).not.toContainText('some text');
+
+SOFT ASSERTİONS
+// Make a few checks that will not stop the test when failed...
+await expect.soft(page.getByTestId('status')).toHaveText('Success');
+await expect.soft(page.getByTestId('eta')).toHaveText('1 day');
+
+REPORTERS
+To run built-in reporters
+npx playwright test --reporter=line
+
+Allure custom setup
+run below with sudo
+npm install --save-dev @playwright/test allure-playwright
+sudo npm install -g allure-commandline
+-update config file
+export default defineConfig({
+  // ...
+  reporter: [["line"], ["allure-playwright"]],
+});
+To see the report after running the tests
+allure serve allure-results
+
+
