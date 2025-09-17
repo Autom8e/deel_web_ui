@@ -19,7 +19,7 @@ export class HomePage {
     async addProduct(productName: string, productId: string) {
         await this.page.getByText(productName).first().hover()
         await this.page.locator('(//a[@data-product-id=' + productId + '])[1]').click()
-        expect(this.page.getByText('Your product has been added to cart'))
+        await expect(this.page.locator('.modal-content')).toContainText('Your product has been added to cart.')
     }
 
     async navigateCartPageFromPopup() {
