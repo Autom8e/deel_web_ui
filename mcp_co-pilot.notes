@@ -1,0 +1,6 @@
+go to extensions tab and install playwright mcp
+configure free github co-pilot 
+
+create instructions folder in project root 
+add instructions/playwright-typescript.instructions.md file in which the content is retrieved from https://github.com/github/awesome-copilot/blob/main/instructions/playwright-typescript.instructions.md
+open copilot chat and click cogwheel>generate instructions 
