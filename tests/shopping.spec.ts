@@ -1,10 +1,10 @@
-import {test, expect} from '@playwright/test'
-import {HomePage} from "../models/HomePage";
+import { test, expect } from '@playwright/test'
+import { HomePage } from "../models/HomePage";
 
-test.describe('Checkout Flow Tests', async () => {
+test.describe('Checkout Flow Tests', () => {
     let homePage: HomePage;
 
-    test.beforeEach('grouping', async ({page}) => {
+    test.beforeEach('grouping', async ({ page }) => {
         homePage = new HomePage(page)
         await homePage.goto()
     })
@@ -16,7 +16,7 @@ test.describe('Checkout Flow Tests', async () => {
         await homePage.navigateCartPageFromPopup()
     });
 
-    test('navigate to cart page from home page', async ({page}) => {
+    test('navigate to cart page from home page', async ({ page }) => {
         // const homePage = new HomePage(page)
         // await homePage.goto()
         await homePage.cartBtn.click()
